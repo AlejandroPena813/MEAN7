@@ -4,7 +4,7 @@ const router = express.Router();
 
 const mongoose = require('mongoose');
 const config  = require('./config/database'); //importing module.exports of DB
-// todo const authentication = require('./routes/authentication')(router); //passing it in this way is to share
+const security = require('./routes/security')(router); //passing it in this way is to share
 const bodyParser = require('body-parser');//acts as middleware to translate json
 const cors = require('cors');
 
@@ -24,17 +24,11 @@ app.use(bodyParser.urlencoded({ extended: false}));//middleware for json deseria
 app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/client/dist/'));// TODO prod only
-// app.use('/api/authentication', authentication);
+app.use('/api/security', security);
 
 app.get( '*', (req, res) => {
-    res.sendFile(path.join(__dirname + '/client/dist/index/html')); //prod
-});
-
-app.get( '/', (req, res) => {
-    res.send('<h1>hello world</h1>');
-});
-app.get( '*', (req, res) => {
-    res.send('<h1>default for all routes</h1>');
+    res.send('<h1>Page not found.</h1>');
+    // todo? res.sendFile(path.join(__dirname + '/client/dist/index/html')); //prod
 });
 
 app.listen(8080, () => {
