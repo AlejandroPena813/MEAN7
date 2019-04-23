@@ -59,5 +59,21 @@ module.exports = (router) => {
         // return res.status(200).json({message: 'Succesfully targeted POST'});
     });
 
+    router.put('/newPrice', (req, res) => {
+        Security.findOne({'isin': req.body.isin}, (err, result) => {
+            if(err){
+                return res.status(500).json({message: 'Trouble finding this security. ' + err});
+            } else{
+                result.dailyPrices.push(req.body.securityPrice);
+                result.save((err) => {
+                    if(err)
+                        return res.status(500).json({message: 'Trouble updating Security with new price.'});
+                    return res.status(200).json({message: 'Successfully saved security price.'});
+                });
+            }
+        })
+    });
+
+
         return router;
 };
